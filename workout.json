@@ -1,0 +1,58 @@
+[
+  {
+    "name": "Heavy Lower",
+    "exercises": [
+      { "name": "Squat", "sets": 3, "reps": 6 },
+      { "name": "Deadlif", "sets": 2, "reps": 6 },
+      { "name": "Optional Excersise", "sets": 3, "reps": 12 },
+      { "name": "Optional Excersise", "sets": 3, "reps": 12 }
+    ]
+  },
+  {
+    "name": "Heavy Upper",
+    "exercises": [
+      { "name": "Bench Press", "sets": 3, "reps": 6 },
+      { "name": "Primary Upper Back Exercise", "sets": 3, "reps": 6 },
+      { "name": "Shoulder Excercise", "sets": 1, "reps": 6 },
+      { "name": "Upper Back Exercise #2", "sets": 1, "reps": 6 },
+      { "name": "Optional Excersise", "sets": 3, "reps": 12 },
+      { "name": "Optional Excersise", "sets": 3, "reps": 12 }
+    ]
+  },
+  {
+    "name": "Wednesday",
+    "exercises": []
+  },
+  {
+    "name": "Thursday",
+    "exercises": [
+      { "name": "Back Squat", "sets": 5, "reps": 8 },
+      { "name": "Deadlift", "sets": 3, "reps": 9 },
+      { "name": "Hamstring Curl", "sets": 3, "reps": 12 },
+      { "name": "Calf Raise", "sets": 5, "reps": 15 },
+      { "name": "Optional Excersise", "sets": 4, "reps": 12 },
+      { "name": "Optional Excersise", "sets": 4, "reps": 12 }
+    ]
+  },
+  {
+    "name": "Friday",
+    "exercises": [
+      { "name": "Bench Press", "sets": 4, "reps": 8 },
+      { "name": "Incline Bench Press", "sets": 4, "reps": 8 },
+      { "name": "Upper Back Exercise #1", "sets": 4, "reps": 8 },
+      { "name": "Upper Back Exercise #2", "sets": 4, "reps": 8 },
+      { "name": "Shoulder Exercise", "sets": 3, "reps": 10 },
+      { "name": "Bicep Exercise", "sets": 3, "reps": 10 },
+      { "name": "Optional Excersise", "sets": 4, "reps": 12 },
+      { "name": "Optional Excersise", "sets": 4, "reps": 12 }
+    ]
+  },
+  {
+    "name": "Saturday",
+    "exercises": []
+  },
+  {
+    "name": "Sunday",
+    "exercises": []
+  }
+]
