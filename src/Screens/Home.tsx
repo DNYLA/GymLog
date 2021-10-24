@@ -5,7 +5,7 @@ import workoutData from '../../workout.json';
 import { WorkoutDay } from '../Components/WorkoutDay';
 import { Day, Week } from '../utils/types';
 
-const Home = () => {
+export default function Home() {
   const [day, setDay] = useState<Week>(Week.Monday);
   const dayDisplay = [
     'Monday',
@@ -44,7 +44,7 @@ const Home = () => {
       ))}
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -60,5 +60,3 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
 });
-
-export default Home;

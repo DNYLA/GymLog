@@ -5,11 +5,8 @@ import Home from './src/Screens/Home';
 import Plan from './src/Screens/Plans';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {
-  faCoffee,
   faCog,
-  faExclamation,
   faExclamationCircle,
-  faExclamationTriangle,
   faHome,
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -17,12 +14,6 @@ export default function App() {
   const Tab = createBottomTabNavigator();
 
   return (
-    // <NavigationContainer>
-    //   {' '}
-    //   <View style={styles.container}>
-    //     <Home />
-    //   </View>
-    // </NavigationContainer>
     <NavigationContainer>
       <Tab.Navigator
         screenOptions={({ route }) => ({

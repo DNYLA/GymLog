@@ -2,13 +2,13 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-const Plan = () => {
+export default function Plan() {
   return (
     <View style={styles.container}>
       <Text>This is a Plan</Text>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -24,5 +24,3 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
 });
-
-export default Plan;

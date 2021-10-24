@@ -2,11 +2,15 @@ import { Text, View } from 'react-native';
 import { Day, Workout } from '../utils/types';
 import React from 'react';
 
-export type Props = {
-  workout: Day;
-};
+// interface WorkoutDayProps {
+//   workout: Day;
+// }
 
-export const WorkoutDay = ({ workout }: Props) => {
+interface WorkoutDayProps {
+  workout: Day;
+}
+
+export function WorkoutDay({ workout }: WorkoutDayProps) {
   if (workout.exercises.length > 0)
     return (
       <View>
@@ -26,4 +30,4 @@ export const WorkoutDay = ({ workout }: Props) => {
   else {
     return <Text>No Workout Planned Today!</Text>;
   }
-};
+}
