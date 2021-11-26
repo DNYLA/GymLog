@@ -14,150 +14,169 @@ import { create } from 'tailwind-rn';
 
 const { tailwind, getColor } = create(style);
 
-export function Home({ navigation }) {
-  const [day, setDay] = useState<Week>(Week.Monday);
+// export function Home({ navigation }) {
+//   const [day, setDay] = useState<Week>(Week.Monday);
+//   const dayDisplay = [
+//     'Monday',
+//     'Tuesday',
+//     'Wednesday',
+//     'Thursday',
+//     'Friday',
+//     'Saturday',
+//     'Sunday',
+//   ];
+
+//   //Rework to include DAY somewhere in the array (Currently assumes index 0 = Monday index 6 = Saturday)
+//   const workout = workoutData;
+//   const name = 'Dan';
+
+//   return (
+//     <View style={styles.container}>
+//       <Text>GymLog App {name}</Text>
+//       <Text>
+//         Here Is Your Workout Routine for {Week[day]}
+//         {'\n'}
+//       </Text>
+
+//       <TouchableOpacity onPress={() => navigation.navigate('Bone')}>
+//         <View style={homeStyles.screenSwitch}>
+//           <Text style={homeStyles.screenText}>New Main</Text>
+//         </View>
+//       </TouchableOpacity>
+//       <WorkoutDay workout={workout[day]} />
+
+//       <StatusBar style="auto" />
+//       <Text>{'\n'}</Text>
+//       {dayDisplay.map((day, i) => (
+//         <Button
+//           key={i}
+//           onPress={() => {
+//             setDay(i);
+//           }}
+//           title={day}
+//         />
+//       ))}
+//       <TouchableHighlight
+//         onPress={() => {
+//           setDay(2);
+//         }}
+//         style={homeStyles.box}
+//         underlayColor="#FFF"
+//       ></TouchableHighlight>
+
+//       <View style={homeStyles.container}>
+//         {dayDisplay.map((day, i) => (
+//           <TouchableOpacity
+//             key={i}
+//             onPress={() => {
+//               setDay(i);
+//             }}
+//             style={homeStyles.touchContainer}
+//           >
+//             <View key={i} style={homeStyles.box}>
+//               <View style={homeStyles.inner}>
+//                 <Text style={{}}>{day}</Text>
+//               </View>
+//             </View>
+//           </TouchableOpacity>
+//         ))}
+//       </View>
+//     </View>
+//   );
+// }
+
+export function Home({ navigation }: any) {
   const dayDisplay = [
     'Monday',
     'Tuesday',
-    'Wednesday',
+    'Wedday',
     'Thursday',
     'Friday',
     'Saturday',
     'Sunday',
   ];
 
-  //Rework to include DAY somewhere in the array (Currently assumes index 0 = Monday index 6 = Saturday)
-  const workout = workoutData;
-  const name = 'Dan';
-
   return (
-    <View style={styles.container}>
-      <Text>GymLog App {name}</Text>
-      <Text>
-        Here Is Your Workout Routine for {Week[day]}
-        {'\n'}
-      </Text>
-
-      <TouchableOpacity onPress={() => navigation.navigate('Bone')}>
-        <View style={homeStyles.screenSwitch}>
-          <Text style={homeStyles.screenText}>New Main</Text>
-        </View>
-      </TouchableOpacity>
-      <WorkoutDay workout={workout[day]} />
-
-      <StatusBar style="auto" />
-      <Text>{'\n'}</Text>
-      {dayDisplay.map((day, i) => (
-        <Button
-          key={i}
-          onPress={() => {
-            setDay(i);
-          }}
-          title={day}
-        />
-      ))}
-      <TouchableHighlight
-        onPress={() => {
-          setDay(2);
-        }}
-        style={homeStyles.box}
-        underlayColor="#FFF"
-      ></TouchableHighlight>
-
-      <View style={homeStyles.container}>
-        {dayDisplay.map((day, i) => (
-          <TouchableOpacity
-            key={i}
-            onPress={() => {
-              setDay(i);
-            }}
-            style={homeStyles.touchContainer}
-          >
-            <View key={i} style={homeStyles.box}>
-              <View style={homeStyles.inner}>
-                <Text style={{}}>{day}</Text>
+    <View style={homeStyles.container}>
+      <View style={homeStyles.weekWrapper}>
+        <Text style={homeStyles.sectionTitle}>Weekly Routine</Text>
+        <View style={homeStyles.weekContainer}>
+          {dayDisplay.map((day, index) => (
+            <TouchableOpacity
+              key={index}
+              onPress={() => navigation.navigate('Bone')}
+            >
+              <View style={homeStyles.day}>
+                <Text style={homeStyles.dayText}>{day}</Text>
               </View>
-            </View>
-          </TouchableOpacity>
-        ))}
+            </TouchableOpacity>
+          ))}
+        </View>
       </View>
     </View>
   );
 }
 
-export function Home2() {
+const homeStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#E8EAED',
+  },
+  weekWrapper: {
+    paddingTop: 20,
+    paddingHorizontal: 20,
+  },
+  sectionTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 15,
+  },
+  weekContainer: {
+    // backgroundColor: 'yellow',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginLeft: 10,
+    // paddingLeft: 10,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  day: {
+    backgroundColor: '#FFF',
+    width: 115,
+    height: 100,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 5,
+    marginRight: 5,
+    borderRadius: 5,
+  },
+  dayText: {
+    width: 115,
+    paddingRight: 0,
+    paddingLeft: 15,
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+});
+
+export function DayView({}: any) {
+  const [day, setDay] = useState<Week>(Week.Monday);
+  const dayDisplay = [
+    'Monday',
+    'Tuesday',
+    'Wedday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',
+  ];
+
   return (
-    <View>
-      <Text>Test</Text>
+    <View style={homeStyles.container}>
+      <Text>Hello</Text>
     </View>
   );
 }
-
-const homeStyles = StyleSheet.create({
-  screenSwitch: {
-    width: '100%',
-    backgroundColor: 'red',
-  },
-  screenText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-  container2: {
-    backgroundColor: 'pink',
-  },
-  container: {
-    backgroundColor: 'pink',
-    height: '15%',
-    width: '40%',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  touchContainer: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: 'yellow',
-    // flex: 1,
-  },
-
-  box: {
-    flex: 1,
-    width: '50%',
-    height: '50%',
-    padding: 5,
-    margin: 4,
-  },
-  inner: {
-    // flex: 1,
-    // backgroundColor: '#eee',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
-
-const homeStyles2 = StyleSheet.create({
-  // touchContainer: {
-  // width: '90%',
-  // backgroundColor: 'yellow',
-  // },
-  // container: {
-  //   width: '100%',
-  //   height: '85%',
-  //   flexDirection: 'row',
-  //   flexWrap: 'wrap',
-  // backgroundColor: 'pink',
-  // },
-  // box: {
-  //   width: '50%',
-  //   height: '50%',
-  //   padding: 5,
-  // },
-  // inner: {
-  //   flex: 1,
-  //   backgroundColor: '#eee',
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  // },
-});
 
 const HomeStack = createNativeStackNavigator();
 
@@ -165,7 +184,7 @@ export function HomeStackScreen() {
   return (
     <HomeStack.Navigator>
       <HomeStack.Screen name="Welcome Dan" component={Home} />
-      <HomeStack.Screen name="Bone" component={Home2} />
+      <HomeStack.Screen name="Bone" component={DayView} />
     </HomeStack.Navigator>
   );
 }
