@@ -1,17 +1,21 @@
 import { NavigationContainer } from '@react-navigation/native';
+import { useKeepAwake } from 'expo-keep-awake';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
-import Home from './src/Screens/Home';
-import Plan from './src/Screens/Plans';
+import { Home, HomeStackScreen } from './src/Screens/Home';
+import { Plan } from './src/Screens/Plans';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {
   faCog,
   faExclamationCircle,
   faHome,
 } from '@fortawesome/free-solid-svg-icons';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Routine } from './src/Screens/Routine';
 
 export default function App() {
   const Tab = createBottomTabNavigator();
+  useKeepAwake();
 
   return (
     <NavigationContainer>
@@ -33,8 +37,12 @@ export default function App() {
           tabBarInactiveTintColor: 'gray',
         })}
       >
-        <Tab.Screen name="Home" component={Home} />
-        <Tab.Screen name="Routine" component={Home} />
+        <Tab.Screen
+          name="Home"
+          component={HomeStackScreen}
+          options={{ headerShown: false }}
+        />
+        <Tab.Screen name="Routine" component={Routine} />
         <Tab.Screen name="Settings" component={Plan} />
       </Tab.Navigator>
     </NavigationContainer>
