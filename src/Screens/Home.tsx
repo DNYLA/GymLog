@@ -1,20 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import {
-  Button,
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  KeyboardAvoidingView,
-  Platform,
-  Keyboard,
-} from 'react-native';
+import { StyleSheet, Text, View, Keyboard } from 'react-native';
 import workoutData from '../../workout.json';
 import { WorkoutDay } from '../Components/WorkoutDay';
 import { Day, Week, Workout } from '../utils/types';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
+  ScrollView,
   TextInput,
   TouchableHighlight,
   TouchableOpacity,
@@ -23,79 +15,12 @@ import style from './../../styles.json';
 import { create } from 'tailwind-rn';
 import { useRoute } from '@react-navigation/core';
 import Task from '../Components/Task';
-
-const { tailwind, getColor } = create(style);
-
-// export function Home({ navigation }) {
-//   const [day, setDay] = useState<Week>(Week.Monday);
-//   const dayDisplay = [
-//     'Monday',
-//     'Tuesday',
-//     'Wednesday',
-//     'Thursday',
-//     'Friday',
-//     'Saturday',
-//     'Sunday',
-//   ];
-
-//   //Rework to include DAY somewhere in the array (Currently assumes index 0 = Monday index 6 = Saturday)
-//   const workout = workoutData;
-//   const name = 'Dan';
-
-//   return (
-//     <View style={styles.container}>
-//       <Text>GymLog App {name}</Text>
-//       <Text>
-//         Here Is Your Workout Routine for {Week[day]}
-//         {'\n'}
-//       </Text>
-
-//       <TouchableOpacity onPress={() => navigation.navigate('Bone')}>
-//         <View style={homeStyles.screenSwitch}>
-//           <Text style={homeStyles.screenText}>New Main</Text>
-//         </View>
-//       </TouchableOpacity>
-//       <WorkoutDay workout={workout[day]} />
-
-//       <StatusBar style="auto" />
-//       <Text>{'\n'}</Text>
-//       {dayDisplay.map((day, i) => (
-//         <Button
-//           key={i}
-//           onPress={() => {
-//             setDay(i);
-//           }}
-//           title={day}
-//         />
-//       ))}
-//       <TouchableHighlight
-//         onPress={() => {
-//           setDay(2);
-//         }}
-//         style={homeStyles.box}
-//         underlayColor="#FFF"
-//       ></TouchableHighlight>
-
-//       <View style={homeStyles.container}>
-//         {dayDisplay.map((day, i) => (
-//           <TouchableOpacity
-//             key={i}
-//             onPress={() => {
-//               setDay(i);
-//             }}
-//             style={homeStyles.touchContainer}
-//           >
-//             <View key={i} style={homeStyles.box}>
-//               <View style={homeStyles.inner}>
-//                 <Text style={{}}>{day}</Text>
-//               </View>
-//             </View>
-//           </TouchableOpacity>
-//         ))}
-//       </View>
-//     </View>
-//   );
-// }
+import { NavigationContainer } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import BouncyCheckbox from 'react-native-bouncy-checkbox';
+import { useDispatch, useSelector } from 'react-redux';
+import { defaultDay, setRoutine } from '../utils/slices/routineSlice';
+import { RootState } from '../../store';
 
 export function Home({ navigation }: any) {
   const dayDisplay = [
@@ -107,6 +32,18 @@ export function Home({ navigation }: any) {
     'Saturday',
     'Sunday',
   ];
+  const date = new Date();
+  let curDay = date.getDay() - 1;
+  curDay = curDay >= 0 ? curDay : 6; //GetDay works from 0-6 starting from Sunday
+
+  console.log(curDay);
+  console.log(date);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log('Resetting Workout Data');
+    dispatch(setRoutine(workoutData));
+  });
 
   return (
     <View style={homeStyles.container}>
@@ -117,13 +54,25 @@ export function Home({ navigation }: any) {
             <TouchableOpacity
               key={index}
               onPress={() => {
-                navigation.navigate('Bone', {
+                navigation.navigate('Workout', {
                   weekDayText: day,
                 });
               }}
             >
-              <View style={homeStyles.day}>
-                <Text style={homeStyles.dayText}>{day}</Text>
+              <View
+                style={[
+                  homeStyles.day,
+                  { backgroundColor: curDay === index ? '#000' : '#FFF' },
+                ]}
+              >
+                <Text
+                  style={[
+                    homeStyles.dayText,
+                    { color: curDay === index ? '#FFF' : '#000' },
+                  ]}
+                >
+                  {day}
+                </Text>
               </View>
             </TouchableOpacity>
           ))}
@@ -152,7 +101,6 @@ const homeStyles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginLeft: 10,
-    // paddingLeft: 10,
     alignItems: 'center',
     justifyContent: 'space-between',
   },
@@ -180,25 +128,16 @@ interface DayViewProps {
   navigation: any;
 }
 
-export function DayView({ route, navigateion }: any) {
+export function DayView({ route, navigation }: any) {
   const { weekDayText } = route.params;
   const weekDayIndex = parseInt(Week[weekDayText]);
-  const workout: Day = workoutData[weekDayIndex];
 
-  const [exercise, setExercise] = useState<Workout>({
-    name: '',
-    sets: 0,
-    reps: 0,
-  });
+  const workouts = useSelector((state: RootState) => state.routine.value);
+  const workoutsCopy = [...workouts];
+  const workout: Day = workoutsCopy[weekDayIndex];
   const [exerciseItems, setExerciseItems] = useState<Workout[]>(
     workout.exercises
   );
-
-  const handleAddTask = () => {
-    Keyboard.dismiss();
-    setExerciseItems([...exerciseItems, exercise]);
-    setExercise({ name: '', sets: 0, reps: 0 });
-  };
 
   //Create Function Here and Prop Drill it instead of prop drilling Function
   //Once moved over to State Management Like Redux would move this to Component
@@ -212,16 +151,36 @@ export function DayView({ route, navigateion }: any) {
   console.log(weekDayText);
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={dayStyles.container}>
       {/* Todays Tasks */}
-      <View style={styles.tasksWrapper}>
-        <Text style={styles.sectionTitle}>{weekDayText}s Routine</Text>
-        <View style={styles.items}>
+      <View style={dayStyles.tasksWrapper}>
+        <View style={dayStyles.titleContainer}>
+          <Text style={dayStyles.sectionTitle}>{weekDayText}s Routine</Text>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Exercise', {
+                exerciseObj: { name: '', sets: 0, reps: 0 },
+                new: true,
+              });
+            }}
+          >
+            <View style={dayStyles.addWrapper}>
+              <Text style={dayStyles.addText}>+</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+
+        <View style={dayStyles.items}>
           {exerciseItems.map((item, index) => {
             return (
               <TouchableOpacity
                 key={index}
-                // onPress={() => completeTask(index)}
+                onPress={() => {
+                  navigation.navigate('Exercise', {
+                    exerciseObj: item,
+                    weekDayIndex,
+                  });
+                }}
               >
                 <Task
                   exercise={item}
@@ -230,40 +189,25 @@ export function DayView({ route, navigateion }: any) {
               </TouchableOpacity>
             );
           })}
-          {/* This is where the tasks will go */}
         </View>
       </View>
-
-      {/* Write a Task */}
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.writeTaskWrapper}
-      >
-        <TextInput
-          style={styles.input}
-          placeholder={'Write a Task...'}
-          value={exercise.name}
-          onChangeText={(text) => setExercise({ name: text, sets: 0, reps: 0 })}
-        />
-        <TouchableOpacity onPress={() => handleAddTask()}>
-          <View style={styles.addWrapper}>
-            <Text style={styles.addText}>+</Text>
-          </View>
-        </TouchableOpacity>
-      </KeyboardAvoidingView>
-    </View>
+    </ScrollView>
   );
 }
 
-const styles = StyleSheet.create({
+const dayStyles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#E8EAED',
+  },
+  titleContainer: {
+    flexDirection: 'row',
   },
   tasksWrapper: {
     paddingTop: 20,
     paddingHorizontal: 20,
     color: 'pink',
+    marginBottom: 10,
   },
   sectionTitle: {
     fontSize: 24,
@@ -292,6 +236,8 @@ const styles = StyleSheet.create({
   addWrapper: {
     width: 60,
     height: 60,
+    marginLeft: 95,
+    marginBottom: 5,
     backgroundColor: '#FFF',
     borderRadius: 60,
     justifyContent: 'center',
@@ -300,6 +246,198 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   addText: {},
+  button: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    marginHorizontal: 15,
+    borderRadius: 4,
+    backgroundColor: 'black',
+  },
+  buttonText: {
+    fontSize: 16,
+    lineHeight: 21,
+    fontWeight: 'bold',
+    letterSpacing: 0.25,
+    color: 'white',
+  },
+});
+
+export function ExerciseView({ route, navigation }: any) {
+  const { exerciseObj, newItem, weekDayIndex } = route.params;
+  const dispatch = useDispatch();
+  const routine = useSelector((state: RootState) => state.routine.value);
+  const [exercise, setExercise] = useState<Workout>(exerciseObj);
+
+  const saveData = () => {
+    console.log('Saving');
+    let valid = true;
+
+    //Do Checks
+    if (!exercise.name) {
+      console.log('null');
+      valid = false;
+    } else if (!exercise.sets) {
+      valid = false;
+    } else if (!exercise.reps) {
+      valid = false;
+    }
+
+    if (valid) {
+      let workoutsCopy = [...routine];
+      console.log(workoutsCopy[0]);
+      // workoutsCopy[0].name = 'Test Change';
+      console.log('----------------asdNEW LINE=---------');
+      // let exIndex = workoutsCopy[weekDayIndex].exercises.findIndex(
+      //   (exc) => exc.id === exercise.id
+      // );
+
+      // console.log('Index = ' + exIndex);
+      // console.log(exercise.name);
+
+      // workoutsCopy[weekDayIndex].exercises[exIndex].name = 'Bobba Fett';
+      // workoutsCopy[weekDayIndex].exercises[exIndex].sets = exercise.sets;
+      // workoutsCopy[weekDayIndex].exercises[exIndex].reps = exercise.reps;
+
+      // console.log(workoutsCopy[weekDayIndex].exercises[exIndex].name);
+
+      // dispatch(setRoutine([defaultDay]));
+      // console.log(routine);
+
+      // console.log(workoutsCopy[weekDayIndex].exercises[exIndex]);
+      // console.log(workouts[weekDayIndex].exercises[exIndex]);
+      // setExercise({ id: workouts.length, name: '', sets: 0, reps: 0 });
+
+      navigation.goBack();
+    }
+  };
+
+  if (newItem) {
+    return (
+      <View>
+        <Text>Hello</Text>
+      </View>
+    );
+  }
+
+  return (
+    <View style={exerciseStyles.container}>
+      <SafeAreaView>
+        <View style={exerciseStyles.areaBox}>
+          <Text style={exerciseStyles.boxTitle}>Name:</Text>
+          <TextInput
+            style={exerciseStyles.input}
+            onChangeText={(text) => setExercise({ ...exercise, name: text })}
+            value={exercise.name}
+            placeholder={'Enter Exercise name...'}
+          />
+        </View>
+        <View style={exerciseStyles.areaBox}>
+          <Text style={exerciseStyles.boxTitle}>Sets:</Text>
+          <TextInput
+            style={exerciseStyles.input}
+            onChangeText={(text) =>
+              setExercise({ ...exercise, sets: Number(text) })
+            }
+            value={String(exercise.sets)}
+            placeholder={'Enter amount of sets...'}
+            keyboardType={'numeric'}
+          />
+        </View>
+        <View style={exerciseStyles.areaBox}>
+          <Text style={exerciseStyles.boxTitle}>Reps:</Text>
+          <TextInput
+            style={exerciseStyles.input}
+            onChangeText={(text) =>
+              setExercise({ ...exercise, reps: Number(text) })
+            }
+            value={String(exercise.reps)}
+            placeholder={'Enter amount of reps...'}
+            keyboardType={'numeric'}
+          />
+        </View>
+        <View style={exerciseStyles.areaBox}>
+          <Text
+            style={[
+              exerciseStyles.boxTitle,
+              { paddingLeft: 0, marginRight: 5 },
+            ]}
+          >
+            Completed:
+          </Text>
+          <BouncyCheckbox size={30} fillColor={'green'} />
+        </View>
+      </SafeAreaView>
+
+      <View style={exerciseStyles.buttonContainer}>
+        <TouchableOpacity onPress={saveData}>
+          <View style={exerciseStyles.button}>
+            <Text style={exerciseStyles.buttonText}>Delete</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={saveData}>
+          <View
+            style={[
+              exerciseStyles.button,
+              {
+                borderColor: '#696969',
+                borderWidth: 2,
+                backgroundColor: 'trasnparent',
+              },
+            ]}
+          >
+            <Text style={[exerciseStyles.buttonText, { color: 'black' }]}>
+              Save
+            </Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+}
+
+const exerciseStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#E8EAED',
+  },
+  input: {
+    height: 40,
+    width: 250,
+    margin: 6,
+    marginLeft: 0,
+    borderWidth: 1,
+    padding: 10,
+  },
+  areaBox: {
+    justifyContent: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  boxTitle: {
+    justifyContent: 'center',
+    width: 80,
+    paddingLeft: 20,
+  },
+  button: {
+    backgroundColor: 'black',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    width: 185,
+    borderRadius: 5,
+    marginLeft: 5,
+    marginTop: 25,
+  },
+  buttonText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#FFF',
+  },
+  buttonContainer: {
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
 });
 
 const HomeStack = createNativeStackNavigator();
@@ -308,7 +446,8 @@ export function HomeStackScreen() {
   return (
     <HomeStack.Navigator>
       <HomeStack.Screen name="Welcome Dan" component={Home} />
-      <HomeStack.Screen name="Bone" component={DayView} />
+      <HomeStack.Screen name="Workout" component={DayView} />
+      <HomeStack.Screen name="Exercise" component={ExerciseView} />
     </HomeStack.Navigator>
   );
 }

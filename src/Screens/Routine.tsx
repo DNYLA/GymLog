@@ -32,41 +32,7 @@ export function Routine() {
 
   return (
     <View style={styles.container}>
-      {/* Todays Tasks */}
-      <View style={styles.tasksWrapper}>
-        <Text style={styles.sectionTitle}>Today's Tasks</Text>
-        <View style={styles.items}>
-          {taskItems.map((item, index) => {
-            return (
-              <TouchableOpacity
-                key={index}
-                // onPress={() => completeTask(index)}
-              >
-                <Task text={item} deleteTaskFunc={() => completeTask(index)} />
-              </TouchableOpacity>
-            );
-          })}
-          {/* This is where the tasks will go */}
-        </View>
-      </View>
-
-      {/* Write a Task */}
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.writeTaskWrapper}
-      >
-        <TextInput
-          style={styles.input}
-          placeholder={'Write a Task...'}
-          value={task}
-          onChangeText={(text) => setTask(text)}
-        />
-        <TouchableOpacity onPress={() => handleAddTask()}>
-          <View style={styles.addWrapper}>
-            <Text style={styles.addText}>+</Text>
-          </View>
-        </TouchableOpacity>
-      </KeyboardAvoidingView>
+      <Text>Text</Text>
     </View>
   );
 }
