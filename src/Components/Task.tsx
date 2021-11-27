@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Workout } from '../utils/types';
 
 interface TaskProps {
-  text: string;
+  exercise: Workout;
   deleteTaskFunc: any;
 }
 
-function Task({ text, deleteTaskFunc }: TaskProps) {
+function Task({ exercise, deleteTaskFunc }: TaskProps) {
   const [completed, setCompleted] = useState(false);
 
   return (
@@ -22,7 +23,9 @@ function Task({ text, deleteTaskFunc }: TaskProps) {
             ]}
           ></View>
         </TouchableOpacity>
-        <Text style={styles.itemText}>{text}</Text>
+        <Text style={styles.itemText}>
+          {exercise.sets} x {exercise.reps} {exercise.name}
+        </Text>
       </View>
       <TouchableOpacity onPress={() => deleteTaskFunc()}>
         <View style={styles.circular}></View>
