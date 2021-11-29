@@ -1,11 +1,13 @@
+import { PayloadAction } from '@reduxjs/toolkit';
 import { Dispatch } from 'react';
 import { Day } from '../utils/types';
+import { AppDispatch } from './store';
 
-export const SET_WORKOUT = 'SET_WORKOUT';
+export const SET_PROGRAM = 'SET_PROGRAM';
 
-export const setWorkout = (workout: Day[]) => (dispatch: any) => {
+export const setProgram = (program: Day[]) => (dispatch: AppDispatch) => {
   dispatch({
-    type: SET_WORKOUT,
-    payload: workout,
+    type: SET_PROGRAM,
+    payload: program,
   });
 };

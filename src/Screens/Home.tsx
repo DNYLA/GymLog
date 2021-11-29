@@ -19,7 +19,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import { useSelector, useDispatch } from 'react-redux';
-import { setWorkout } from '../redux/action';
+import { setProgram } from '../redux/action';
+import { stateType } from '../redux/reducers';
+import { RootState } from '../redux/store';
 
 export function Home({ navigation }: any) {
   const dayDisplay = [
@@ -35,7 +37,7 @@ export function Home({ navigation }: any) {
   let curDay = date.getDay() - 1;
   curDay = curDay >= 0 ? curDay : 6; //GetDay works from 0-6 starting from Sunday
 
-  const { workout } = useSelector((state: any) => state.workoutReducer);
+  // const { program } = useSelector((state: any) => state.workoutReducer);
   const dispatch = useDispatch();
 
   console.log(curDay);
@@ -44,7 +46,7 @@ export function Home({ navigation }: any) {
   useEffect(() => {
     console.log('Resetting Workout Data');
     //Set Thingy
-    dispatch(setWorkout(workoutData));
+    dispatch(setProgram(workoutData));
   }, []);
 
   return (
@@ -135,10 +137,10 @@ export function DayView({ route, navigation }: any) {
   const weekDayIndex = parseInt(Week[weekDayText]);
 
   // const workouts = useSelector((state: RootState) => state.routine.value);
-  const { workout } = useSelector((state: any) => state.workoutReducer);
+  const { program } = useSelector((state: any) => state.programReducer);
 
-  const workoutsCopy = [...workout];
-  const curWorkout: Day = workoutsCopy[weekDayIndex];
+  const programCopy = [...program];
+  const curWorkout: Day = programCopy[weekDayIndex];
   const [exerciseItems, setExerciseItems] = useState<Workout[]>(
     curWorkout.exercises
   );
@@ -271,7 +273,7 @@ const dayStyles = StyleSheet.create({
 export function ExerciseView({ route, navigation }: any) {
   const { exerciseObj, newItem, weekDayIndex } = route.params;
   const dispatch = useDispatch();
-  const { workout } = useSelector((state: any) => state.workoutReducer);
+  const { program } = useSelector((state: RootState) => state.programReducer);
 
   const [exercise, setExercise] = useState<Workout>(exerciseObj);
 
@@ -290,20 +292,32 @@ export function ExerciseView({ route, navigation }: any) {
     }
 
     if (valid) {
-      let workoutsCopy = [...workout];
-      workoutsCopy[0].name = 'Test Change';
-
-      let exIndex = workoutsCopy[weekDayIndex].exercises.findIndex(
+      let programCopy = [...program];
+      let exIndex = programCopy[weekDayIndex].exercises.findIndex(
         (exc: any) => exc.id === exercise.id
       );
 
-      workoutsCopy[weekDayIndex].exercises[exIndex].name = exercise.name;
-      workoutsCopy[weekDayIndex].exercises[exIndex].sets = exercise.sets;
-      workoutsCopy[weekDayIndex].exercises[exIndex].reps = exercise.reps;
+      programCopy[weekDayIndex].exercises[exIndex].name = exercise.name;
+      programCopy[weekDayIndex].exercises[exIndex].sets = exercise.sets;
+      programCopy[weekDayIndex].exercises[exIndex].reps = exercise.reps;
 
-      dispatch(setWorkout(workoutsCopy));
+      dispatch(setProgram(programCopy));
       navigation.goBack();
     }
+  };
+
+  const deleteData = () => {
+    console.log('Deleting');
+    let programCopy = [...program];
+    let exIndex = programCopy[weekDayIndex].exercises.findIndex(
+      (exc: any) => exc.id === exercise.id
+    );
+
+    programCopy[weekDayIndex].exercises[exIndex].name = 'Test Change';
+    programCopy[weekDayIndex].exercises.splice(exIndex, 1);
+
+    dispatch(setProgram(programCopy));
+    navigation.goBack();
   };
 
   if (newItem) {
@@ -364,7 +378,7 @@ export function ExerciseView({ route, navigation }: any) {
       </SafeAreaView>
 
       <View style={exerciseStyles.buttonContainer}>
-        <TouchableOpacity onPress={saveData}>
+        <TouchableOpacity onPress={deleteData}>
           <View style={exerciseStyles.button}>
             <Text style={exerciseStyles.buttonText}>Delete</Text>
           </View>

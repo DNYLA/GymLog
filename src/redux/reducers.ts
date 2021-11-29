@@ -1,16 +1,22 @@
-import { SET_WORKOUT } from './action';
+import { PayloadAction } from '@reduxjs/toolkit';
+import { Day } from '../utils/types';
+import { SET_PROGRAM } from './action';
 
-const initialState = {
-  workout: [],
+export type stateType = {
+  program: Day[];
 };
 
-function workoutReducer(state = initialState, action: any) {
+const initialState: stateType = {
+  program: new Array<Day>(),
+};
+
+function programReducer(state = initialState, action: PayloadAction<Day[]>) {
   switch (action.type) {
-    case SET_WORKOUT:
-      return { ...state, workout: action.payload };
+    case SET_PROGRAM:
+      return { ...state, program: action.payload };
     default:
       return state;
   }
 }
 
-export default workoutReducer;
+export default programReducer;
