@@ -31,6 +31,7 @@
     "react-native-web": "0.17.1",
     "react-redux": "^7.2.6",
     "redux": "^4.1.2",
+    "redux-thunk": "^2.4.1",
     "tailwind-rn": "^3.0.1",
     "tailwindcss": "^2.2.17"
   },

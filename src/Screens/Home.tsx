@@ -18,9 +18,8 @@ import Task from '../Components/Task';
 import { NavigationContainer } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
-import { useDispatch, useSelector } from 'react-redux';
-import { defaultDay, setRoutine } from '../utils/slices/routineSlice';
-import { RootState } from '../../store';
+import { useSelector, useDispatch } from 'react-redux';
+import { setWorkout } from '../redux/action';
 
 export function Home({ navigation }: any) {
   const dayDisplay = [
@@ -36,14 +35,17 @@ export function Home({ navigation }: any) {
   let curDay = date.getDay() - 1;
   curDay = curDay >= 0 ? curDay : 6; //GetDay works from 0-6 starting from Sunday
 
+  const { workout } = useSelector((state: any) => state.workoutReducer);
+  const dispatch = useDispatch();
+
   console.log(curDay);
   console.log(date);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     console.log('Resetting Workout Data');
-    dispatch(setRoutine(workoutData));
-  });
+    //Set Thingy
+    dispatch(setWorkout(workoutData));
+  }, []);
 
   return (
     <View style={homeStyles.container}>
@@ -132,11 +134,13 @@ export function DayView({ route, navigation }: any) {
   const { weekDayText } = route.params;
   const weekDayIndex = parseInt(Week[weekDayText]);
 
-  const workouts = useSelector((state: RootState) => state.routine.value);
-  const workoutsCopy = [...workouts];
-  const workout: Day = workoutsCopy[weekDayIndex];
+  // const workouts = useSelector((state: RootState) => state.routine.value);
+  const { workout } = useSelector((state: any) => state.workoutReducer);
+
+  const workoutsCopy = [...workout];
+  const curWorkout: Day = workoutsCopy[weekDayIndex];
   const [exerciseItems, setExerciseItems] = useState<Workout[]>(
-    workout.exercises
+    curWorkout.exercises
   );
 
   //Create Function Here and Prop Drill it instead of prop drilling Function
@@ -267,7 +271,8 @@ const dayStyles = StyleSheet.create({
 export function ExerciseView({ route, navigation }: any) {
   const { exerciseObj, newItem, weekDayIndex } = route.params;
   const dispatch = useDispatch();
-  const routine = useSelector((state: RootState) => state.routine.value);
+  const { workout } = useSelector((state: any) => state.workoutReducer);
+
   const [exercise, setExercise] = useState<Workout>(exerciseObj);
 
   const saveData = () => {
@@ -285,30 +290,18 @@ export function ExerciseView({ route, navigation }: any) {
     }
 
     if (valid) {
-      let workoutsCopy = [...routine];
-      console.log(workoutsCopy[0]);
-      // workoutsCopy[0].name = 'Test Change';
-      console.log('----------------asdNEW LINE=---------');
-      // let exIndex = workoutsCopy[weekDayIndex].exercises.findIndex(
-      //   (exc) => exc.id === exercise.id
-      // );
+      let workoutsCopy = [...workout];
+      workoutsCopy[0].name = 'Test Change';
 
-      // console.log('Index = ' + exIndex);
-      // console.log(exercise.name);
+      let exIndex = workoutsCopy[weekDayIndex].exercises.findIndex(
+        (exc: any) => exc.id === exercise.id
+      );
 
-      // workoutsCopy[weekDayIndex].exercises[exIndex].name = 'Bobba Fett';
-      // workoutsCopy[weekDayIndex].exercises[exIndex].sets = exercise.sets;
-      // workoutsCopy[weekDayIndex].exercises[exIndex].reps = exercise.reps;
+      workoutsCopy[weekDayIndex].exercises[exIndex].name = exercise.name;
+      workoutsCopy[weekDayIndex].exercises[exIndex].sets = exercise.sets;
+      workoutsCopy[weekDayIndex].exercises[exIndex].reps = exercise.reps;
 
-      // console.log(workoutsCopy[weekDayIndex].exercises[exIndex].name);
-
-      // dispatch(setRoutine([defaultDay]));
-      // console.log(routine);
-
-      // console.log(workoutsCopy[weekDayIndex].exercises[exIndex]);
-      // console.log(workouts[weekDayIndex].exercises[exIndex]);
-      // setExercise({ id: workouts.length, name: '', sets: 0, reps: 0 });
-
+      dispatch(setWorkout(workoutsCopy));
       navigation.goBack();
     }
   };

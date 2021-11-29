@@ -13,13 +13,14 @@ import {
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Routine } from './src/Screens/Routine';
 import { Provider } from 'react-redux';
-import { store } from './store';
+import { Store } from './src/redux/store';
+
 export default function App() {
   const Tab = createBottomTabNavigator();
   useKeepAwake();
 
   return (
-    <Provider store={store}>
+    <Provider store={Store}>
       <NavigationContainer>
         <Tab.Navigator
           screenOptions={({ route }) => ({
