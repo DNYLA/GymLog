@@ -12,27 +12,10 @@ import {
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Task from '../Components/Task';
 
-export function Routine() {
-  const [task, setTask] = useState('');
-  const [taskItems, setTaskItems] = useState(['']);
-  const handleAddTask = () => {
-    Keyboard.dismiss();
-    setTaskItems([...taskItems, task]);
-    setTask('');
-  };
-
-  //Create Function Here and Prop Drill it instead of prop drilling Function
-  //Once moved over to State Management Like Redux would move this to Component
-  const completeTask = (index: number) => {
-    let itemsCopy = [...taskItems];
-    itemsCopy.splice(index, 1);
-    setTaskItems(itemsCopy);
-    //Handle Opening Up Task Form
-  };
-
+export function Explore() {
   return (
     <View style={styles.container}>
-      <Text>Text</Text>
+      <Text>Explore Page Under Construction!</Text>
     </View>
   );
 }

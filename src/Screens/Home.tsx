@@ -1,26 +1,18 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Keyboard } from 'react-native';
-import workoutData from '../../workout.json';
-import { WorkoutDay } from '../Components/WorkoutDay';
+import { StyleSheet, Text, View } from 'react-native';
+import programData from '../../program.json';
 import { Day, Week, Workout } from '../utils/types';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
   ScrollView,
   TextInput,
-  TouchableHighlight,
   TouchableOpacity,
 } from 'react-native-gesture-handler';
-import style from './../../styles.json';
-import { create } from 'tailwind-rn';
-import { useRoute } from '@react-navigation/core';
 import Task from '../Components/Task';
-import { NavigationContainer } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import { useSelector, useDispatch } from 'react-redux';
 import { setProgram } from '../redux/action';
-import { stateType } from '../redux/reducers';
 import { RootState } from '../redux/store';
 
 export function Home({ navigation }: any) {
@@ -40,13 +32,9 @@ export function Home({ navigation }: any) {
   // const { program } = useSelector((state: any) => state.workoutReducer);
   const dispatch = useDispatch();
 
-  console.log(curDay);
-  console.log(date);
-
   useEffect(() => {
     console.log('Resetting Workout Data');
-    //Set Thingy
-    dispatch(setProgram(workoutData));
+    dispatch(setProgram(programData));
   }, []);
 
   return (
@@ -166,7 +154,8 @@ export function DayView({ route, navigation }: any) {
             onPress={() => {
               navigation.navigate('Exercise', {
                 exerciseObj: { name: '', sets: 0, reps: 0 },
-                new: true,
+                weekDayIndex,
+                newExc: true,
               });
             }}
           >
@@ -271,7 +260,7 @@ const dayStyles = StyleSheet.create({
 });
 
 export function ExerciseView({ route, navigation }: any) {
-  const { exerciseObj, newItem, weekDayIndex } = route.params;
+  const { exerciseObj, newItem, weekDayIndex, newExc } = route.params;
   const dispatch = useDispatch();
   const { program } = useSelector((state: RootState) => state.programReducer);
 
@@ -293,6 +282,22 @@ export function ExerciseView({ route, navigation }: any) {
 
     if (valid) {
       let programCopy = [...program];
+
+      if (newExc) {
+        console.log('New Item');
+        const newId = programCopy[weekDayIndex].exercises.length;
+        const exc: Workout = {
+          id: newId,
+          name: exercise.name,
+          sets: exercise.sets,
+          reps: exercise.reps,
+        };
+        programCopy[weekDayIndex].exercises.push(exc);
+        dispatch(setProgram(programCopy));
+        navigation.goBack();
+        return;
+      }
+
       let exIndex = programCopy[weekDayIndex].exercises.findIndex(
         (exc: any) => exc.id === exercise.id
       );
@@ -308,6 +313,12 @@ export function ExerciseView({ route, navigation }: any) {
 
   const deleteData = () => {
     console.log('Deleting');
+    //Item is "New"
+    if (newExc) {
+      navigation.goBack();
+      return;
+    }
+
     let programCopy = [...program];
     let exIndex = programCopy[weekDayIndex].exercises.findIndex(
       (exc: any) => exc.id === exercise.id

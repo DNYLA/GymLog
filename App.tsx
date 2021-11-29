@@ -3,15 +3,20 @@ import { useKeepAwake } from 'expo-keep-awake';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
 import { Home, HomeStackScreen } from './src/Screens/Home';
-import { Plan } from './src/Screens/Plans';
+import { Settings } from './src/Screens/Settings';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {
   faCog,
   faExclamationCircle,
   faHome,
+  faCompass,
+  faDraftingCompass,
+  faHouseUser,
+  faUserCog,
 } from '@fortawesome/free-solid-svg-icons';
+
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Routine } from './src/Screens/Routine';
+import { Explore } from './src/Screens/Explore';
 import { Provider } from 'react-redux';
 import { Store } from './src/redux/store';
 
@@ -25,12 +30,14 @@ export default function App() {
         <Tab.Navigator
           screenOptions={({ route }) => ({
             tabBarIcon: ({ focused, color, size }) => {
-              let icon = faExclamationCircle;
+              let icon = faHome;
 
               if (route.name === 'Home') {
-                icon = focused ? faHome : faHome;
+                icon = focused ? faHouseUser : faHome;
+              } else if (route.name === 'Explore') {
+                icon = focused ? faCompass : faCompass;
               } else if (route.name === 'Settings') {
-                icon = focused ? faCog : faCog;
+                icon = focused ? faUserCog : faCog;
               }
 
               // You can return any component that you like here!
@@ -45,8 +52,8 @@ export default function App() {
             component={HomeStackScreen}
             options={{ headerShown: false }}
           />
-          <Tab.Screen name="Routine" component={Routine} />
-          <Tab.Screen name="Settings" component={Plan} />
+          <Tab.Screen name="Explore" component={Explore} />
+          <Tab.Screen name="Settings" component={Settings} />
         </Tab.Navigator>
       </NavigationContainer>
     </Provider>

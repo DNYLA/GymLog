@@ -2,10 +2,10 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-export function Plan() {
+export function Settings() {
   return (
     <View style={styles.container}>
-      <Text>This is a Plan</Text>
+      <Text>User Settings Under Construction</Text>
     </View>
   );
 }
