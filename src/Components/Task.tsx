@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import { Workout } from '../utils/types';
 
 interface TaskProps {
@@ -13,16 +19,24 @@ function Task({ exercise, deleteTaskFunc }: TaskProps) {
   return (
     <View style={styles.item}>
       <View style={styles.itemLeft}>
-        <TouchableOpacity onPress={() => setCompleted(!completed)}>
-          <View
-            style={[
-              styles.square,
-              {
-                backgroundColor: completed ? 'green' : 'red',
-              },
-            ]}
-          ></View>
-        </TouchableOpacity>
+        <TouchableWithoutFeedback>
+          <TouchableOpacity
+            onPress={() => {
+              console.log('Touched Task Opacity');
+              setCompleted(!completed);
+            }}
+          >
+            <View
+              style={[
+                styles.square,
+                {
+                  backgroundColor: completed ? 'green' : 'red',
+                },
+              ]}
+            ></View>
+          </TouchableOpacity>
+        </TouchableWithoutFeedback>
+
         <Text style={styles.itemText}>
           {exercise.sets} x {exercise.reps} {exercise.name}
         </Text>

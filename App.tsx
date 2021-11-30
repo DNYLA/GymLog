@@ -2,23 +2,18 @@ import { NavigationContainer } from '@react-navigation/native';
 import { useKeepAwake } from 'expo-keep-awake';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
-import { Home, HomeStackScreen } from './src/Screens/Home';
 import { Settings } from './src/Screens/Settings';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {
-  faCog,
-  faExclamationCircle,
   faHome,
-  faCompass,
-  faDraftingCompass,
   faHouseUser,
+  faCompass,
   faUserCog,
 } from '@fortawesome/free-solid-svg-icons';
-
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Explore } from './src/Screens/Explore';
 import { Provider } from 'react-redux';
 import { Store } from './src/redux/store';
+import { HomeStackScreen } from './src/Screens/Home/HomeStack';
 
 export default function App() {
   const Tab = createBottomTabNavigator();
@@ -37,7 +32,7 @@ export default function App() {
               } else if (route.name === 'Explore') {
                 icon = focused ? faCompass : faCompass;
               } else if (route.name === 'Settings') {
-                icon = focused ? faUserCog : faCog;
+                icon = focused ? faUserCog : faUserCog;
               }
 
               // You can return any component that you like here!
