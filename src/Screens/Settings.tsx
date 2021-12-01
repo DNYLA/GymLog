@@ -12,6 +12,7 @@ export function Settings({ navigation }: any) {
       .catch((error) => alert(error.message));
   };
 
+  //Update to Return an upgrade account Feature
   let displayText;
   if (auth.currentUser?.isAnonymous) {
     displayText = <Text>Signed in As Guest.</Text>;

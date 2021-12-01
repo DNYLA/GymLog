@@ -13,34 +13,71 @@ import {
   signInAnonymously,
   onAuthStateChanged,
 } from 'firebase/auth';
-import { auth } from '../../firebase';
+import { auth, db } from '../../firebase';
+import { addDoc, collection, doc, getDoc, setDoc } from '@firebase/firestore';
 
 export function LoginScreen({ navigation }: any) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   useEffect(() => {
+    //Handles Already logged in
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         console.log('Logged In Already');
+        createUserDocument(user.uid);
         navigation.replace('App');
       }
     });
     return unsubscribe;
   }, []);
 
+  //No need for a Seperate Sign up page right now as we only ask for Email + Password right now.
   const handleSignUp = () => {
     createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredentials) => {
+      .then(async (userCredentials) => {
         const user = userCredentials.user;
+        await addDoc(collection(db, 'users', user.uid), {
+          first: 'Jim',
+          last: 'Jones',
+          born: 1815,
+        })
+          .then((doc) => console.log(doc.id))
+          .catch((error) => console.log(error));
         console.log(`Registered in with `, user.email);
       })
       .catch((error) => alert(error.message));
   };
 
   const handleAnonLogin = () => {
-    signInAnonymously(auth).then(() => {
+    signInAnonymously(auth).then(async (userCredentials) => {
+      const user = userCredentials.user;
+      const newDocRef = doc(collection(db, 'users'));
+      // await setDoc(newDocRef, {
+      //   id: user.uid,
+      //   last: 'Jones',
+      //   born: 1815,
+      // });
+      await setDoc(doc(db, `users`, user.uid), {
+        id: user.uid,
+        last: 'Jones',
+        born: 1815,
+      })
+        .then((document) => console.log('Setting Doc ID'))
+        .catch((error) => alert(error.message));
+
       console.log(`Logged In as Guest User`);
+    });
+  };
+
+  const createUserDocument = async (id: string) => {
+    const userRef = doc(db, `users/${id}`);
+    const userSnap = await getDoc(userRef);
+    if (userSnap.exists()) return;
+
+    await setDoc(doc(db, `users`, id), {
+      first: 'Dan',
+      born: 1815,
     });
   };
 

@@ -26,6 +26,7 @@ export default function App() {
   return (
     <Provider store={Store}>
       <NavigationContainer>
+        {/** Need a Stack Navigator on top of the Tab navigator to transition From Login -> Home */}
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="App" component={AppTabNavigation} />
