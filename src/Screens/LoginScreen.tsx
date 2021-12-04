@@ -39,7 +39,6 @@ export function LoginScreen({ navigation }: any) {
       if (user) {
         console.log('Logged In Already');
         createUserDocument(user.uid);
-        fetchProgramDocument(user.uid);
         navigation.replace('App');
       }
     });
@@ -99,30 +98,6 @@ export function LoginScreen({ navigation }: any) {
       items: programData,
     });
     dispatch(setProgram(programData));
-  };
-
-  const fetchProgramDocument = async (id: string) => {
-    const programsRef = collection(db, `programs`);
-    const q = query(programsRef, where('owner', '==', id));
-    const querySnapshot = await getDocs(q);
-
-    //This should never run but included here just incase
-    if (querySnapshot.empty) {
-      await addDoc(collection(db, `programs`), {
-        owner: id,
-        items: programData,
-      });
-      dispatch(setProgram(programData));
-      return;
-    }
-
-    //For Now we will only retreive the first item and use that as our program.
-    dispatch(setProgram(querySnapshot.docs[0].data().items));
-
-    // return {
-    //   owner: id,
-    //   items: programData,
-    // };
   };
 
   const handleLogin = () => {
