@@ -11,14 +11,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 import { setProgram } from '../../../redux/action';
 import { RootState } from '../../../redux/store';
-import { Workout } from '../../../utils/types';
+import { Exercise, Workout } from '../../../utils/types';
 
 export function ExerciseView({ route, navigation }: any) {
   const { exerciseObj, newItem, weekDayIndex, newExc } = route.params;
   const dispatch = useDispatch();
   const { program } = useSelector((state: RootState) => state.programReducer);
 
-  const [exercise, setExercise] = useState<Workout>(exerciseObj);
+  const [exercise, setExercise] = useState<Exercise>(exerciseObj);
 
   const saveData = () => {
     console.log('Saving');
@@ -40,11 +40,12 @@ export function ExerciseView({ route, navigation }: any) {
       if (newExc) {
         console.log('New Item');
         const newId = programCopy[weekDayIndex].exercises.length;
-        const exc: Workout = {
+        const exc: Exercise = {
           id: newId,
           name: exercise.name,
           sets: exercise.sets,
           reps: exercise.reps,
+          completed: false,
         };
         programCopy[weekDayIndex].exercises.push(exc);
         dispatch(setProgram(programCopy));
@@ -133,7 +134,16 @@ export function ExerciseView({ route, navigation }: any) {
           <Text style={[styles.boxTitle, { paddingLeft: 0, marginRight: 5 }]}>
             Completed:
           </Text>
-          <BouncyCheckbox size={30} fillColor={'green'} />
+          <BouncyCheckbox
+            size={30}
+            fillColor={'green'}
+            disableText={true}
+            onPress={(isChecked: boolean) => {
+              setExercise({ ...exercise, completed: isChecked });
+              console.log(isChecked);
+            }}
+            isChecked={exercise.completed}
+          />
         </View>
       </SafeAreaView>
 

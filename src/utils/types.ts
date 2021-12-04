@@ -1,13 +1,14 @@
-export type Workout = {
+export type Exercise = {
   id: number;
   name: string;
   sets: number;
   reps: number;
+  completed: boolean;
 };
 
-export type Day = {
+export type Workout = {
   name: string;
-  exercises: Workout[];
+  exercises: Exercise[];
 };
 
 export enum Week {

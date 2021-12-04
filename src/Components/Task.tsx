@@ -6,44 +6,51 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
 } from 'react-native';
-import { Workout } from '../utils/types';
+import { Exercise } from '../utils/types';
 
 interface TaskProps {
-  exercise: Workout;
+  exercise: Exercise;
+  flipTaskFunc: any;
   deleteTaskFunc: any;
 }
 
-function Task({ exercise, deleteTaskFunc }: TaskProps) {
-  const [completed, setCompleted] = useState(false);
-
+function Task({ exercise, flipTaskFunc, deleteTaskFunc }: TaskProps) {
   return (
     <View style={styles.item}>
       <View style={styles.itemLeft}>
-        <TouchableWithoutFeedback>
-          <TouchableOpacity
-            onPress={() => {
-              console.log('Touched Task Opacity');
-              setCompleted(!completed);
-            }}
-          >
-            <View
-              style={[
-                styles.square,
-                {
-                  backgroundColor: completed ? 'green' : 'red',
-                },
-              ]}
-            ></View>
-          </TouchableOpacity>
-        </TouchableWithoutFeedback>
+        <View
+          style={[
+            styles.square,
+            {
+              backgroundColor: exercise.completed ? 'green' : 'red',
+            },
+          ]}
+        ></View>
+        {/* Nested Touchable Opacity Makes it Harder to Click */}
+        {/* <TouchableOpacity
+          onPress={() => {
+            console.log('Touched Task Opacity');
+            flipTaskFunc();
+          }}
+        >
+          <View
+            style={[
+              styles.square,
+              {
+                backgroundColor: exercise.completed ? 'green' : 'red',
+              },
+            ]}
+          ></View>
+        </TouchableOpacity> */}
 
         <Text style={styles.itemText}>
           {exercise.sets} x {exercise.reps} {exercise.name}
         </Text>
       </View>
-      <TouchableOpacity onPress={() => deleteTaskFunc()}>
+
+      {/* <TouchableOpacity onPress={() => deleteTaskFunc()}>
         <View style={styles.circular}></View>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 }

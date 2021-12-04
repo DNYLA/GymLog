@@ -1,16 +1,19 @@
 import { PayloadAction } from '@reduxjs/toolkit';
-import { Day } from '../utils/types';
+import { Workout } from '../utils/types';
 import { SET_PROGRAM } from './action';
 
 export type stateType = {
-  program: Day[];
+  program: Workout[];
 };
 
 const initialState: stateType = {
-  program: new Array<Day>(),
+  program: new Array<Workout>(),
 };
 
-function programReducer(state = initialState, action: PayloadAction<Day[]>) {
+function programReducer(
+  state = initialState,
+  action: PayloadAction<Workout[]>
+) {
   switch (action.type) {
     case SET_PROGRAM:
       return { ...state, program: action.payload };

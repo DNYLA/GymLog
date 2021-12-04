@@ -1,30 +1,39 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { Day, Week, Workout } from '../../../utils/types';
+import { Exercise, Week, Workout } from '../../../utils/types';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import Task from '../../../Components/Task';
 import { useSelector } from 'react-redux';
 
-interface DayViewProps {
+interface WorkoutViewProps {
   route: any;
   navigation: any;
 }
 
-export function DayView({ route, navigation }: DayViewProps) {
+export function WorkoutView({ route, navigation }: WorkoutViewProps) {
   const { weekDayText } = route.params;
   const weekDayIndex = parseInt(Week[weekDayText]);
 
   const { program } = useSelector((state: any) => state.programReducer);
 
   const programCopy = [...program];
-  const curWorkout: Day = programCopy[weekDayIndex];
-  const [exerciseItems, setExerciseItems] = useState<Workout[]>(
+  const curWorkout: Workout = programCopy[weekDayIndex];
+  const [exerciseItems, setExerciseItems] = useState<Exercise[]>(
     curWorkout.exercises
   );
 
   const deleteTask = (index: number) => {
     let itemsCopy = [...exerciseItems];
     itemsCopy.splice(index, 1);
+    setExerciseItems(itemsCopy);
+  };
+
+  const flipCompleted = (item: Exercise) => {
+    let itemsCopy = [...exerciseItems];
+
+    itemsCopy = itemsCopy.map((i) =>
+      i.id === item.id ? { ...item, completed: !item.completed } : i
+    );
     setExerciseItems(itemsCopy);
   };
 
@@ -66,6 +75,7 @@ export function DayView({ route, navigation }: DayViewProps) {
               >
                 <Task
                   exercise={item}
+                  flipTaskFunc={() => flipCompleted(item)}
                   deleteTaskFunc={() => deleteTask(index)}
                 />
               </TouchableOpacity>
