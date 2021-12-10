@@ -8,7 +8,14 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { auth, db } from '../../../firebase';
 import { collection, getDoc, query } from '@firebase/firestore';
 import { addDoc, doc, getDocs, where } from 'firebase/firestore';
-import { Workout } from '../../utils/types';
+import { ProgramType, Week, Workout } from '../../utils/types';
+import DialogButton from 'react-native-dialog/lib/Button';
+import Dialog from 'react-native-dialog';
+import { RootState } from '../../redux/store';
+type LabelType = {
+  label: string;
+  value: string;
+};
 
 export function HomeView({ navigation }: any) {
   const [open, setOpen] = useState(false);
@@ -16,7 +23,7 @@ export function HomeView({ navigation }: any) {
     { label: 'Loading Programs', value: 'Loading' },
   ]);
   const [value, setValue] = useState('Loading Programs');
-
+  const [isVisible, setIsVisible] = useState(false);
   const dayDisplay = [
     'Monday',
     'Tuesday',
@@ -26,6 +33,8 @@ export function HomeView({ navigation }: any) {
     'Saturday',
     'Sunday',
   ];
+  const [dialogText, setDialogText] = useState('');
+
   const date = new Date();
   let curDay = date.getDay() - 1;
   curDay = curDay >= 0 ? curDay : 6; //GetDay works from 0-6 starting from Sunday
@@ -55,21 +64,29 @@ export function HomeView({ navigation }: any) {
         owner: id,
         items: programData,
       });
-      dispatch(setProgram(programData));
+      // dispatch(setProgram(programData));
       return;
     }
 
     //For Now we will only retreive the first item and use that as our program.
-    dispatch(setProgram(querySnapshot.docs[0].data().items));
-    const jsonTest = [{ label: 'Loading Programs', value: 'Loading' }];
-    jsonTest.pop();
+    const curProgramDoc: ProgramType = {
+      name: querySnapshot.docs[0].data().name,
+      owner: querySnapshot.docs[0].data().owner,
+      items: querySnapshot.docs[0].data().items,
+    };
+
+    dispatch(setProgram(curProgramDoc));
+
+    const programList = new Array<LabelType>();
+    // [{ label: 'Loading Programs', value: 'Loading' }]
+    // programList.pop();
     querySnapshot.forEach((doc) => {
       const snap = doc.data();
-      jsonTest.push({ label: snap.name, value: doc.id });
+      programList.push({ label: snap.name, value: doc.id });
     });
 
-    jsonTest.push({ label: 'New Program...', value: 'new' });
-    setItems(jsonTest);
+    programList.push({ label: 'New Program...', value: 'new' });
+    setItems(programList);
     setValue(items[0].value);
 
     // return {
@@ -81,24 +98,70 @@ export function HomeView({ navigation }: any) {
   const onValueChange = async (value: any) => {
     console.log(value);
     if (value === 'new') {
-      const defaultWorkout: Workout[] = new Array<Workout>();
-      for (let i = 0; i < 7; i++) {
-        console.log(i);
-        defaultWorkout.push({ name: 'Monday', exercises: [] });
-      }
-      dispatch(setProgram(defaultWorkout));
-      return;
+      setIsVisible(true);
     }
 
     const programRef = doc(db, `programs/${value}`);
     const programSnap = await getDoc(programRef);
     if (!programSnap.exists()) return;
 
+    const data = programSnap.data();
+
+    const curProgramDoc: ProgramType = {
+      name: data.name,
+      owner: data.owner,
+      items: data.items,
+    };
+
     dispatch(setProgram(programSnap.data().items));
+  };
+
+  const handleDialogCreate = async () => {
+    console.log('Test');
+    const defaultWorkout: Workout[] = new Array<Workout>();
+    for (let i = 0; i < 7; i++) {
+      defaultWorkout.push({ name: Week[i], exercises: [] });
+    }
+
+    console.log('Done');
+    const user = auth.currentUser;
+
+    const newProgram: ProgramType = {
+      items: defaultWorkout,
+      name: dialogText,
+      owner: user!.uid,
+    };
+
+    dispatch(setProgram(newProgram));
+    setIsVisible(false);
+
+    return;
   };
 
   return (
     <View style={homeStyles.container}>
+      <View>
+        <Dialog.Container visible={isVisible}>
+          <Dialog.Title>Enter New Program Name</Dialog.Title>
+          <Dialog.Description>
+            Enter the name for the new Program
+          </Dialog.Description>
+          <Dialog.Input
+            placeholder={'Strength/Hypertrophy'}
+            value={dialogText}
+            onChangeText={(text) => {
+              setDialogText(text);
+            }}
+          ></Dialog.Input>
+          <Dialog.Button onPress={() => setIsVisible(false)} label="Cancel" />
+          <Dialog.Button
+            onPress={() => {
+              handleDialogCreate();
+            }}
+            label="Create"
+          />
+        </Dialog.Container>
+      </View>
       <View style={homeStyles.weekWrapper}>
         <DropDownPicker
           open={open}
