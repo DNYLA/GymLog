@@ -16,7 +16,7 @@ import { Exercise, Workout } from '../../../utils/types';
 export function ExerciseView({ route, navigation }: any) {
   const { exerciseObj, newItem, weekDayIndex, newExc } = route.params;
   const dispatch = useDispatch();
-  const { program } = useSelector((state: RootState) => state.programReducer);
+  const program = useSelector((state: RootState) => state.programReducer);
 
   const [exercise, setExercise] = useState<Exercise>(exerciseObj);
 
@@ -35,11 +35,12 @@ export function ExerciseView({ route, navigation }: any) {
     }
 
     if (valid) {
-      let programCopy = [...program];
+      let programCopy = { ...program };
+      let workoutsCopy = [...program.items];
 
       if (newExc) {
         console.log('New Item');
-        const newId = programCopy[weekDayIndex].exercises.length;
+        const newId = workoutsCopy[weekDayIndex].exercises.length;
         const exc: Exercise = {
           id: newId,
           name: exercise.name,
@@ -47,19 +48,21 @@ export function ExerciseView({ route, navigation }: any) {
           reps: exercise.reps,
           completed: false,
         };
-        programCopy[weekDayIndex].exercises.push(exc);
+        workoutsCopy[weekDayIndex].exercises.push(exc);
         dispatch(setProgram(programCopy));
         navigation.goBack();
         return;
       }
 
-      let exIndex = programCopy[weekDayIndex].exercises.findIndex(
+      let exIndex = workoutsCopy[weekDayIndex].exercises.findIndex(
         (exc: any) => exc.id === exercise.id
       );
 
-      programCopy[weekDayIndex].exercises[exIndex].name = exercise.name;
-      programCopy[weekDayIndex].exercises[exIndex].sets = exercise.sets;
-      programCopy[weekDayIndex].exercises[exIndex].reps = exercise.reps;
+      workoutsCopy[weekDayIndex].exercises[exIndex].name = exercise.name;
+      workoutsCopy[weekDayIndex].exercises[exIndex].sets = exercise.sets;
+      workoutsCopy[weekDayIndex].exercises[exIndex].reps = exercise.reps;
+
+      programCopy.items = workoutsCopy;
 
       dispatch(setProgram(programCopy));
       navigation.goBack();
@@ -74,13 +77,16 @@ export function ExerciseView({ route, navigation }: any) {
       return;
     }
 
-    let programCopy = [...program];
-    let exIndex = programCopy[weekDayIndex].exercises.findIndex(
+    let programCopy = { ...program };
+    let workoutsCopy = [...program.items];
+    let exIndex = workoutsCopy[weekDayIndex].exercises.findIndex(
       (exc: any) => exc.id === exercise.id
     );
 
-    programCopy[weekDayIndex].exercises[exIndex].name = 'Test Change';
-    programCopy[weekDayIndex].exercises.splice(exIndex, 1);
+    workoutsCopy[weekDayIndex].exercises[exIndex].name = 'Test Change';
+    workoutsCopy[weekDayIndex].exercises.splice(exIndex, 1);
+
+    programCopy.items = workoutsCopy;
 
     dispatch(setProgram(programCopy));
     navigation.goBack();

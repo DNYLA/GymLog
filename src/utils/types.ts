@@ -11,6 +11,12 @@ export type Workout = {
   exercises: Exercise[];
 };
 
+export type ProgramType = {
+  name: string;
+  owner: string;
+  items: Workout[];
+};
+
 export enum Week {
   Monday,
   Tuesday,

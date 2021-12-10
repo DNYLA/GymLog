@@ -1,22 +1,20 @@
 import { PayloadAction } from '@reduxjs/toolkit';
-import { Workout } from '../utils/types';
+import { ProgramType, Workout } from '../utils/types';
 import { SET_PROGRAM } from './action';
 
-export type stateType = {
-  program: Workout[];
-};
-
-const initialState: stateType = {
-  program: new Array<Workout>(),
+const initialState: ProgramType = {
+  name: 'Generic Program',
+  owner: '0',
+  items: new Array<Workout>(),
 };
 
 function programReducer(
   state = initialState,
-  action: PayloadAction<Workout[]>
+  action: PayloadAction<ProgramType>
 ) {
   switch (action.type) {
     case SET_PROGRAM:
-      return { ...state, program: action.payload };
+      return action.payload;
     default:
       return state;
   }

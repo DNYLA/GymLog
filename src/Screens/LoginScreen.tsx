@@ -97,6 +97,10 @@ export function LoginScreen({ navigation }: any) {
       owner: id,
       items: programData,
     });
+
+    console.log('Loaded Workout');
+    console.log(programData);
+
     dispatch(setProgram(programData));
   };
 

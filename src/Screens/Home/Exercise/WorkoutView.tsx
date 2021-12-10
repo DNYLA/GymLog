@@ -4,6 +4,7 @@ import { Exercise, Week, Workout } from '../../../utils/types';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import Task from '../../../Components/Task';
 import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux/store';
 
 interface WorkoutViewProps {
   route: any;
@@ -14,10 +15,13 @@ export function WorkoutView({ route, navigation }: WorkoutViewProps) {
   const { weekDayText } = route.params;
   const weekDayIndex = parseInt(Week[weekDayText]);
 
-  const { program } = useSelector((state: any) => state.programReducer);
+  const program = useSelector((state: RootState) => state.programReducer);
 
-  const programCopy = [...program];
-  const curWorkout: Workout = programCopy[weekDayIndex];
+  const programCopy = { ...program };
+  const curWorkout: Workout = programCopy.items[weekDayIndex];
+  console.log('Workout Current');
+  console.log(programCopy);
+  console.log(curWorkout);
   const [exerciseItems, setExerciseItems] = useState<Exercise[]>(
     curWorkout.exercises
   );

@@ -1,184 +1,206 @@
-[
-  {
-    "name": "Heavy Lower",
-    "exercises": [
-      { "id": 0, "name": "Squat", "sets": 3, "reps": 6, "completed": false },
-      { "id": 1, "name": "Deadlift", "sets": 2, "reps": 6, "completed": false },
-      {
-        "id": 2,
-        "name": "Optional Exercise",
-        "sets": 3,
-        "reps": 12,
-        "completed": true
-      },
-      {
-        "id": 3,
-        "name": "Optional Exercise",
-        "sets": 3,
-        "reps": 12,
-        "completed": false
-      }
-    ]
-  },
-  {
-    "name": "Heavy Upper",
-    "exercises": [
-      {
-        "id": 0,
-        "name": "Bench Press",
-        "sets": 3,
-        "reps": 6,
-        "completed": false
-      },
-      {
-        "id": 1,
-        "name": "Primary Upper Back Exercise",
-        "sets": 3,
-        "reps": 6,
-        "completed": false
-      },
-      {
-        "id": 2,
-        "name": "Shoulder Exercise",
-        "sets": 1,
-        "reps": 6,
-        "completed": false
-      },
-      {
-        "id": 3,
-        "name": "Upper Back Exercise #2",
-        "sets": 1,
-        "reps": 6,
-        "completed": false
-      },
-      {
-        "id": 4,
-        "name": "Optional Exercise",
-        "sets": 3,
-        "reps": 12,
-        "completed": false
-      },
-      {
-        "id": 5,
-        "name": "Optional Exercise",
-        "sets": 3,
-        "reps": 12,
-        "completed": false
-      }
-    ]
-  },
-  {
-    "name": "Wednesday",
-    "exercises": []
-  },
-  {
-    "name": "Thursday",
-    "exercises": [
-      {
-        "id": 0,
-        "name": "Back Squat",
-        "sets": 5,
-        "reps": 8,
-        "completed": false
-      },
-      { "id": 1, "name": "Deadlift", "sets": 3, "reps": 8, "completed": false },
-      {
-        "id": 2,
-        "name": "Hamstring Curl",
-        "sets": 3,
-        "reps": 12,
-        "completed": false
-      },
-      {
-        "id": 3,
-        "name": "Calf Raise",
-        "sets": 5,
-        "reps": 15,
-        "completed": false
-      },
-      {
-        "id": 4,
-        "name": "Optional Exercise",
-        "sets": 4,
-        "reps": 12,
-        "completed": false
-      },
-      {
-        "id": 5,
-        "name": "Optional Exercise",
-        "sets": 4,
-        "reps": 12,
-        "completed": false
-      }
-    ]
-  },
-  {
-    "name": "Friday",
-    "exercises": [
-      {
-        "id": 0,
-        "name": "Bench Press",
-        "sets": 4,
-        "reps": 8,
-        "completed": false
-      },
-      {
-        "id": 1,
-        "name": "Incline Bench Press",
-        "sets": 4,
-        "reps": 8,
-        "completed": false
-      },
-      {
-        "id": 2,
-        "name": "Upper Back Exercise #1",
-        "sets": 4,
-        "reps": 8,
-        "completed": false
-      },
-      {
-        "id": 3,
-        "name": "Upper Back Exercise #2",
-        "sets": 4,
-        "reps": 8,
-        "completed": false
-      },
-      {
-        "id": 4,
-        "name": "Shoulder Exercise",
-        "sets": 3,
-        "reps": 10,
-        "completed": false
-      },
-      {
-        "id": 5,
-        "name": "Bicep Exercise",
-        "sets": 3,
-        "reps": 10,
-        "completed": false
-      },
-      {
-        "id": 6,
-        "name": "Optional Exercise",
-        "sets": 4,
-        "reps": 12,
-        "completed": false
-      },
-      {
-        "id": 7,
-        "name": "Optional Exercise",
-        "sets": 4,
-        "reps": 12,
-        "completed": false
-      }
-    ]
-  },
-  {
-    "name": "Saturday",
-    "exercises": []
-  },
-  {
-    "name": "Sunday",
-    "exercises": []
-  }
-]
+{
+  "items": [
+    {
+      "exercises": [
+        {
+          "completed": false,
+          "id": 0,
+          "name": "Squat",
+          "reps": 6,
+          "sets": 3
+        },
+        {
+          "completed": false,
+          "id": 1,
+          "name": "Deadlift",
+          "reps": 6,
+          "sets": 2
+        },
+        {
+          "completed": true,
+          "id": 2,
+          "name": "Optional Exercise",
+          "reps": 12,
+          "sets": 3
+        },
+        {
+          "completed": false,
+          "id": 3,
+          "name": "Optional Exercise",
+          "reps": 12,
+          "sets": 3
+        }
+      ],
+      "name": "Heavy Lower"
+    },
+    {
+      "exercises": [
+        {
+          "completed": false,
+          "id": 0,
+          "name": "Bench Press",
+          "reps": 6,
+          "sets": 3
+        },
+        {
+          "completed": false,
+          "id": 1,
+          "name": "Primary Upper Back Exercise",
+          "reps": 6,
+          "sets": 3
+        },
+        {
+          "completed": false,
+          "id": 2,
+          "name": "Shoulder Exercise",
+          "reps": 6,
+          "sets": 1
+        },
+        {
+          "completed": false,
+          "id": 3,
+          "name": "Upper Back Exercise #2",
+          "reps": 6,
+          "sets": 1
+        },
+        {
+          "completed": false,
+          "id": 4,
+          "name": "Optional Exercise",
+          "reps": 12,
+          "sets": 3
+        },
+        {
+          "completed": false,
+          "id": 5,
+          "name": "Optional Exercise",
+          "reps": 12,
+          "sets": 3
+        }
+      ],
+      "name": "Heavy Upper"
+    },
+    {
+      "exercises": [],
+      "name": "Wednesday"
+    },
+    {
+      "exercises": [
+        {
+          "completed": false,
+          "id": 0,
+          "name": "Back Squat",
+          "reps": 8,
+          "sets": 5
+        },
+        {
+          "completed": false,
+          "id": 1,
+          "name": "Deadlift",
+          "reps": 8,
+          "sets": 3
+        },
+        {
+          "completed": false,
+          "id": 2,
+          "name": "Hamstring Curl",
+          "reps": 12,
+          "sets": 3
+        },
+        {
+          "completed": false,
+          "id": 3,
+          "name": "Calf Raise",
+          "reps": 15,
+          "sets": 5
+        },
+        {
+          "completed": false,
+          "id": 4,
+          "name": "Optional Exercise",
+          "reps": 12,
+          "sets": 4
+        },
+        {
+          "completed": false,
+          "id": 5,
+          "name": "Optional Exercise",
+          "reps": 12,
+          "sets": 4
+        }
+      ],
+      "name": "Thursday"
+    },
+    {
+      "exercises": [
+        {
+          "completed": false,
+          "id": 0,
+          "name": "Bench Press",
+          "reps": 8,
+          "sets": 4
+        },
+        {
+          "completed": false,
+          "id": 1,
+          "name": "Incline Bench Press",
+          "reps": 8,
+          "sets": 4
+        },
+        {
+          "completed": false,
+          "id": 2,
+          "name": "Upper Back Exercise #1",
+          "reps": 8,
+          "sets": 4
+        },
+        {
+          "completed": false,
+          "id": 3,
+          "name": "Upper Back Exercise #2",
+          "reps": 8,
+          "sets": 4
+        },
+        {
+          "completed": false,
+          "id": 4,
+          "name": "Shoulder Exercise",
+          "reps": 10,
+          "sets": 3
+        },
+        {
+          "completed": false,
+          "id": 5,
+          "name": "Bicep Exercise",
+          "reps": 10,
+          "sets": 3
+        },
+        {
+          "completed": false,
+          "id": 6,
+          "name": "Optional Exercise",
+          "reps": 12,
+          "sets": 4
+        },
+        {
+          "completed": false,
+          "id": 7,
+          "name": "Optional Exercise",
+          "reps": 12,
+          "sets": 4
+        }
+      ],
+      "name": "Friday"
+    },
+    {
+      "exercises": [],
+      "name": "Saturday"
+    },
+    {
+      "exercises": [],
+      "name": "Sunday"
+    }
+  ],
+  "name": "Main",
+  "owner": "jv9SEN84yKaYMmtnnlNYgxhx3LN2"
+}
