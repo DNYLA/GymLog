@@ -12,6 +12,7 @@ import { ProgramType, Week, Workout } from '../../utils/types';
 import DialogButton from 'react-native-dialog/lib/Button';
 import Dialog from 'react-native-dialog';
 import { RootState } from '../../redux/store';
+import { name } from 'faker';
 type LabelType = {
   label: string;
   value: string;
@@ -53,7 +54,7 @@ export function HomeView({ navigation }: any) {
     fetchProgramDocument(user.uid);
   }, []);
 
-  const fetchProgramDocument = async (id: string) => {
+  const fetchProgramDocument = async (id: string, selectedDoc?: string) => {
     const programsRef = collection(db, `programs`);
     const q = query(programsRef, where('owner', '==', id));
     const querySnapshot = await getDocs(q);
@@ -75,8 +76,6 @@ export function HomeView({ navigation }: any) {
       items: querySnapshot.docs[0].data().items,
     };
 
-    dispatch(setProgram(curProgramDoc));
-
     const programList = new Array<LabelType>();
     // [{ label: 'Loading Programs', value: 'Loading' }]
     // programList.pop();
@@ -87,7 +86,25 @@ export function HomeView({ navigation }: any) {
 
     programList.push({ label: 'New Program...', value: 'new' });
     setItems(programList);
+
+    if (selectedDoc) {
+      const index = programList.findIndex((item) => item.value == selectedDoc);
+      if (index >= 0) {
+        setValue(selectedDoc);
+        console.log('Hitting');
+        console.log(selectedDoc);
+        // const ccurProgramDoc: ProgramType = {
+        //   name: querySnapshot.docs[index].data().name,
+        //   owner: querySnapshot.docs[index].data().owner,
+        //   items: querySnapshot.docs[index].data().items,
+        // };
+        // dispatch(setProgram(ccurProgramDoc));
+        return;
+      }
+    }
+
     setValue(items[0].value);
+    dispatch(setProgram(curProgramDoc));
 
     // return {
     //   owner: id,
@@ -99,8 +116,8 @@ export function HomeView({ navigation }: any) {
     console.log(value);
     if (value === 'new') {
       setIsVisible(true);
+      return;
     }
-
     const programRef = doc(db, `programs/${value}`);
     const programSnap = await getDoc(programRef);
     if (!programSnap.exists()) return;
@@ -113,17 +130,16 @@ export function HomeView({ navigation }: any) {
       items: data.items,
     };
 
-    dispatch(setProgram(programSnap.data().items));
+    dispatch(setProgram(curProgramDoc));
   };
 
   const handleDialogCreate = async () => {
-    console.log('Test');
+    console.log('Starting Dialog Create');
     const defaultWorkout: Workout[] = new Array<Workout>();
     for (let i = 0; i < 7; i++) {
       defaultWorkout.push({ name: Week[i], exercises: [] });
     }
 
-    console.log('Done');
     const user = auth.currentUser;
 
     const newProgram: ProgramType = {
@@ -132,9 +148,17 @@ export function HomeView({ navigation }: any) {
       owner: user!.uid,
     };
 
-    dispatch(setProgram(newProgram));
+    const doc = await addDoc(collection(db, `programs`), {
+      owner: newProgram.owner,
+      name: newProgram.name,
+      items: newProgram.items,
+    });
     setIsVisible(false);
+    console.log(doc.id);
 
+    // onValueChange(doc.id);
+    fetchProgramDocument(user!.uid, doc.id);
+    console.log('Created New Program');
     return;
   };
 

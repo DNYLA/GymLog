@@ -27,6 +27,7 @@ import {
 import programData from '../../program.json';
 import { setProgram } from '../redux/action';
 import { useDispatch } from 'react-redux';
+import { ProgramType } from '../utils/types';
 
 export function LoginScreen({ navigation }: any) {
   const [email, setEmail] = useState('');
@@ -93,15 +94,22 @@ export function LoginScreen({ navigation }: any) {
       born: 1815,
     });
 
-    await addDoc(collection(db, `programs`), {
+    const defaultProgram: ProgramType = {
       owner: id,
-      items: programData,
+      name: 'Default Workout',
+      items: programData.items,
+    };
+
+    const doct = await addDoc(collection(db, `programs`), {
+      owner: defaultProgram.owner,
+      name: defaultProgram.name,
+      items: defaultProgram.items,
     });
 
     console.log('Loaded Workout');
     console.log(programData);
 
-    dispatch(setProgram(programData));
+    dispatch(setProgram(defaultProgram));
   };
 
   const handleLogin = () => {
